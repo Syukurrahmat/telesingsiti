@@ -17,8 +17,9 @@ con.connect(function(err) {
     if (err) throw err;
     console.log("Connected!");
 });
+const port = process.env.PORT || 4000
 
-app.listen(4000,()=>{
+app.listen(port,()=>{
     console.log('server connected')
 })
 
@@ -146,7 +147,7 @@ function getFullTodayDate(){
 
 setInterval(()=>{
     getdataTS(Math.floor(Math.random()*100))
-},60000)
+},1800000)
 
 function getdataTS(data){
     dt = new Date()
