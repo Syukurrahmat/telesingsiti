@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TelesingSiti</title>
+    <link rel="shortcut icon" href="img/icon.ico">
+    <link rel="stylesheet" href="styledata.css">
+    <script src="amcharts4/core.js"></script>
+    <script src="amcharts4/charts.js"></script>
+    <script src="amcharts4/themes/animated.js"></script>
+</head>
+
+<body>
+    <% let arrKelemb = JSON.parse(kelemb) %>
+
+    <div class="container">
+        <nav>
+            <a href="/">
+                <img src="img/humidity.svg" alt="">
+                <h3>TelesingSiti</h3>
+            </a>
+            
+            <div class="navkanan">
+                <p><%= hari %></p>
+                <!-- <div > -->
+                    <img src="img/menu.svg" alt="">
+                <!-- </div> -->
+            </div>
+        </nav>
+
+            <header>
+                <div class="kiri">
+                    <h4>Lahan Bu xixixi</h4>
+                    <div class="box">
+                        <div class="sejajar">
+                            <img src="img/profile.svg" alt="">
+                            <p><%= data.nama %></p>
+                        </div>
+                        <div class="sejajar">
+                            <img src="img/location-outline.svg" alt="">
+                            <p><%= data.lokasi %></p>
+                            <a href="https://www.google.com/maps/?q=<%=data.lokasi%>" target="_blank"><img class= 'minggir' src="img/map.svg" alt=""></a>
+                        </div>
+                        <div class="sejajar">
+                            <img src="img/plant.svg" alt="">
+                            <p><%= data.komoditas %></p>
+                        </div>
+                        <div class="sejajar">
+                            <img src="img/landscape-line.svg" alt="">
+                            <p><%= data.luas %> m<sup>2</sup></p>
+                        </div>
+                        <div class="sejajar">
+                            <img src="img/locate.svg" alt="">
+                            <p><%= data.alamat %></p>
+                        </div>
+           
+                    </div>
+                </div>
+                <div class="kanan">
+                        <h4>kelembaban tanah terkini</h4>
+                        <p><%= arrKelemb[arrKelemb.length-1].data%> %</p>
+                </div>
+
+            </header>
+
+            <article>
+                <div class="judul">
+                    <h4>Grafik Kelembaban Tanah</h4>
+                    <div class="pilih">
+                        <a href="/lahan-<%-data.id%>">
+                            <div class="today <%= (rt=='today')? 'now':'' %>">24 Jam</div>
+                        </a>
+                        <a href="/lahan-<%-data.id%>-yesterday">
+                            <div class="yesterday <%= (rt=='yesterday')? 'now':'' %>">Kemaren</div>
+                        </a>
+                        <a href="/lahan-<%-data.id%>-all">
+                            <div class="all <%= (rt=='all')? 'now':'' %>" >Semua</div>
+                        </a>
+                    </div>
+                </div>
+                <div class="grafik">
+                    <div id="chartdiv" style="width: 100%; height: 100%;"></div>
+                </div>
+            </article>
+
+            <aside>
+                <div>
+                    <h4>Tabel Kelembaban Tanah</h4>
+                </div>
+                    <div class="tabel">
+                        <div class="headertb">
+                            <p>Tanggal</p>
+                            <p>Pukul</p>
+                            <p>Kelembaban tanah</p>
+                        </div>
+                        <div class="isitabelbox">
+                            <% arrKelemb.reverse().forEach(e=>{ %>
+                                <div class="isitb">
+                                    <p><%=e.date%></p>
+                                    <p><%=e.time%></p>
+                                    <p><%=e.data%> %</p>
+                                </div>
+                                <% }) %>
+                        </div>
+                    </div>
+
+            </aside>
+
+
+
+        
+    </div>    
+
+
+
+    <script>
+        let klm = JSON.parse('<%-kelemb%>')
+
+        datagrafik = klm.map(e=>{
+            bulan =['Jan','Feb','Mar','Apr','Mei','Jun','jul','Agu','Sep','Okt','Nov','Des']
+            tgl = e.date.split(' ')
+            tgl = '('+tgl[0]+'/'+ bulan.indexOf(tgl[1])+')'
+            return {
+                'time': e.time +'\n'+tgl,
+                'data':e.data
+            }
+        })
+
+
+
+
+        // Chart code 
+
+        am4core.ready(function() {
+            
+            am4core.useTheme(am4themes_animated);            
+            var chart = am4core.create("chartdiv", am4charts.XYChart);
+            var data = [];
+            chart.data = datagrafik
+
+            var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
+            categoryAxis.renderer.grid.template.location = 0;
+            categoryAxis.renderer.ticks.template.disabled = false;
+            categoryAxis.renderer.line.opacity = 0;
+            categoryAxis.renderer.grid.template.disabled = true;
+            categoryAxis.renderer.minGridDistance = 50;
+            categoryAxis.dataFields.category = "time";
+            categoryAxis.startLocation = 0.4;
+            categoryAxis.endLocation = 0.6;
+
+            var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+            valueAxis.tooltip.disabled = true;
+            valueAxis.renderer.line.opacity = 0;
+            valueAxis.renderer.ticks.template.disabled = true;
+            valueAxis.min = 0;
+            valueAxis.max = 100;
+
+            var lineSeries = chart.series.push(new am4charts.LineSeries());
+            lineSeries.dataFields.categoryX = "time";
+            lineSeries.dataFields.valueY = "data";
+            lineSeries.tooltipText = "data: {valueY.value}";
+            lineSeries.fillOpacity = 0.5;
+            lineSeries.strokeWidth = 2;
+            lineSeries.propertyFields.stroke = "lineColor";
+            lineSeries.propertyFields.fill = "lineColor";
+
+            var bullet = lineSeries.bullets.push(new am4charts.CircleBullet());
+            bullet.circle.radius = 2;
+            bullet.circle.fill = am4core.color("#fff");
+            bullet.circle.strokeWidth = 2;
+
+            chart.cursor = new am4charts.XYCursor();
+            chart.cursor.behavior = "panX";
+            chart.cursor.lineX.opacity = 0;
+            chart.cursor.lineY.opacity = 0;
+
+
+            chart.scrollbarX = new am4core.Scrollbar();
+            chart.scrollbarX.parent = chart.bottomAxesContainer;
+
+
+        });
+
+
+
+</script>
+
+
+   
+</body>
+</html>

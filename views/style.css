@@ -1,0 +1,140 @@
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: poppins;
+    text-transform: capitalize;
+
+}
+p{
+    font-size: 14px;
+}
+a{
+    text-decoration: none;
+    color: inherit;
+}
+body{
+    background-color: #f7faff;
+}
+h3{
+    font-size: 23px;
+    font-weight: 500;
+    color:#3781C2;
+}
+
+h1{
+    font-size: 40px;
+    font-weight: 550;
+    color:#085758
+
+}
+.container{
+    max-width:1240px;
+    width: 100%;
+    min-height: 100vh;
+    height: 100vh;
+    margin: 0 auto;
+    padding: 15px 20px;
+
+    display: grid;
+    grid-template-columns: 5fr;
+    grid-template-rows: max-content 5fr 2fr ;
+    gap:20px;
+}
+
+/* nav */
+nav{
+    display: flex;
+    justify-content: space-between;
+    align-content: center; 
+
+    width: 100%;
+    height: 23px;
+
+    grid-column: 1/ -1;
+}
+nav div ,nav a{
+    align-items: center;
+    display: flex;
+    height:  115%;
+}
+nav img:first-child{
+    width: 18px;
+    margin-right: 15px;
+}
+
+nav .navkanan img{
+    width: 24px;
+}
+
+nav img:last-child{
+    margin: 0 auto;
+}
+
+/* header */
+header{
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 17px 20px;
+
+    grid-column: 1/ -1;
+
+    background-color: #FCFEFE;
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.18) 0px 2px 4px;
+    color: #085758;
+}
+header p{
+    margin-top: 5px;
+    font-size: 1.01em;
+    max-width: 500px;
+}
+main{
+    display: flex;
+    text-align: center;
+    flex-direction: column;
+}
+main section{
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+main div{
+    display: flex;
+    padding: 10px 30px;
+    background-color: #1AA398;
+    width: max-content;
+    margin: 10px;
+    color: white;
+    border-radius: 5px;
+    box-shadow: 0 1px 2px 0px rgba(0, 0, 0, 0.158);
+    transition: 0.3s;
+    cursor: pointer;
+    
+}
+main div img{
+    margin-left: 25px;
+}
+main div:hover{
+    transform: scale(1.01);
+    box-shadow: 0 1px 2px 2px rgba(0, 0, 0, 0.158);
+
+}
+
+.about{
+    width: 250px;
+    height: max-content;
+    box-shadow: 1px 1px 2px 2px gray;
+    background-color: white;
+    position: absolute;
+    top: 0;
+}
+.about img{
+    width: 200px;
+}

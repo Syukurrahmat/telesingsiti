@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TelesingSiti</title>
+    <link rel="shortcut icon" href="img/icon.ico">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <nav>
+            <a href="/">
+                <img src="img/humidity.svg" alt="">
+                <h3>TelesingSiti</h3>
+            </a>
+            <div class="navkanan">
+                <img src="img/menu.svg" style="width: 1.5em;"alt="">
+            </div>
+        </nav>
+        <header>
+            <h1>TelesingSiti</h1>
+            <p>Aplikasi monitoring kelembaban tanah berbasis grafik dan tabel secara realtime</p>
+        </header>
+        <main>
+            <p>Lahan yang tercatat</p>
+            <section>
+                <% data.forEach(e=>{  %>
+                <a href="http://localhost:4000/lahan-<%=e.id %>">
+                    <div class="button">
+                        <p><%=e.lahan%>></p>
+                        <img src="img/bx-chevron-right-square.svg" alt="">
+                    </div>
+                </a>
+                <% }) %>
+                </section>
+        </main>
+    </div>
+
+
+</body>
+</html>
