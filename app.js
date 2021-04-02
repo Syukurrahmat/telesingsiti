@@ -157,25 +157,26 @@ app.get('/lahan-:id',async function (req, res) {  //today
 
 
 let bulan = ['Jan','Feb','Mar','Apr','Mei','Jun','jul','Agu','Sep','Okt','Nov','Des']
+let gmt7 = 25200000
 
 function getTodayDate(){
-    let gmt7 = 25200000
-    td = new Date(Date.now())+gmt7;
+   
+    td = new Date(Date.now()+gmt7);
     return td.getDate()+" "+bulan[td.getMonth()]+' '+(td.getYear()+1900)
 }
 function getYesterdayDate(){
-    let gmt7 = 25200000
+   
     yes = new Date(Date.now() + gmt7 - 86400000);
     return yes.getDate()+" "+bulan[yes.getMonth()] + ' ' +(yes.getYear()+1900)
 }
 function getSelumbariDate(){
-    let gmt7 = 25200000
+   
     sl = new Date(Date.now() + gmt7 - 172800000);
     return yes.getDate()+" "+bulan[yes.getMonth()] + ' ' +(yes.getYear()+1900)
 }
 
 function getFullTodayDate(){
-    let gmt7 = 25200000
+   
     let bulanFull = ['Januari','Februari','Maret','April','Mei','Juni','juli','Agustus','September','Oktober','November','Desember']
     let hari = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu']
 
@@ -194,7 +195,8 @@ getdataTS(Math.floor(Math.random()*100))
 
 
 function getdataTS(data){
-    dt = new Date()
+    
+    dt =  new Date(Date.now()+gmt7)
     jam =  dt.getHours() +':' + dt.getMinutes() //jam sekarang
     today = getTodayDate()
 
