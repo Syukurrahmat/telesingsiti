@@ -145,7 +145,7 @@
             categoryAxis.renderer.ticks.template.disabled = false;
             categoryAxis.renderer.line.opacity = 0;
             categoryAxis.renderer.grid.template.disabled = true;
-            categoryAxis.renderer.minGridDistance = 50;
+            categoryAxis.renderer.minGridDistance = (screen.availWidth>600)? 50: 40;
             categoryAxis.dataFields.category = "time";
             categoryAxis.startLocation = 0.4;
             categoryAxis.endLocation = 0.6;
@@ -179,6 +179,12 @@
 
             chart.scrollbarX = new am4core.Scrollbar();
             chart.scrollbarX.parent = chart.bottomAxesContainer;
+
+            chart.zoomOutButton.disabled = true
+
+            categoryAxis.start =(screen.availWidth>600)? 0.6: 0.8;
+            categoryAxis.end = 1;
+            categoryAxis.keepSelection = true;
 
 
         });
