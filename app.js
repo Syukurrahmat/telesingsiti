@@ -159,23 +159,27 @@ app.get('/lahan-:id',async function (req, res) {  //today
 let bulan = ['Jan','Feb','Mar','Apr','Mei','Jun','jul','Agu','Sep','Okt','Nov','Des']
 
 function getTodayDate(){
-    td = new Date(Date.now());
+    let gmt7 = 25200000
+    td = new Date(Date.now())+gmt7;
     return td.getDate()+" "+bulan[td.getMonth()]+' '+(td.getYear()+1900)
 }
 function getYesterdayDate(){
-    yes = new Date(Date.now() - 86400000);
+    let gmt7 = 25200000
+    yes = new Date(Date.now() + gmt7 - 86400000);
     return yes.getDate()+" "+bulan[yes.getMonth()] + ' ' +(yes.getYear()+1900)
 }
 function getSelumbariDate(){
-    sl = new Date(Date.now() - 172800000);
+    let gmt7 = 25200000
+    sl = new Date(Date.now() + gmt7 - 172800000);
     return yes.getDate()+" "+bulan[yes.getMonth()] + ' ' +(yes.getYear()+1900)
 }
 
 function getFullTodayDate(){
+    let gmt7 = 25200000
     let bulanFull = ['Januari','Februari','Maret','April','Mei','Juni','juli','Agustus','September','Oktober','November','Desember']
     let hari = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu']
 
-    td = new Date(Date.now());
+    td = new Date(Date.now() + gmt7);
     return hari[td.getDay()]+", "+td.getDate()+" "+bulanFull[td.getMonth()]+' '+(td.getYear()+1900)
 }
 
