@@ -97,20 +97,21 @@ app.get('/lahan-:id-yesterday', function(req,res){
 })
 
 // all data page
-app.get('/lahan-:id-all', function(req,res){
-    
+app.get('/lahan-:id-selumbari', function(req,res){
+    let selumbari = getSelumbariDate()
+
     con.query("SELECT * FROM data_lahan WHERE id=?",[req.params.id], function (err, result1, fields) {
         if (err) console.log(err);
         // console.log(result1);
         
-        con.query("SELECT * FROM "+result1[0].tabelkelembaban, function (err, result2, fields) {
+        con.query("SELECT * FROM "+result1[0].tabelkelembaban +' WHERE date=?',[selumbari], function (err, result2, fields) {
             if (err) console.log(err);
             // console.log(result2);
 
             res.render('data',{
                 data:result1[0],
                 kelemb:JSON.stringify(result2),
-                rt:'all',
+                rt:'yesterday',
                 hari:getFullTodayDate()
             })
 
@@ -123,9 +124,6 @@ app.get('/lahan-:id',async function (req, res) {  //today
 
     today = getTodayDate()
     yesterday = getYesterdayDate()
-
-    console.log(today)
-    console.log(yesterday)
 
     con.query("SELECT * FROM data_lahan WHERE id=?",[req.params.id], function (err, result1, fields) {
         if (err) console.log(err);
@@ -166,6 +164,10 @@ function getTodayDate(){
 }
 function getYesterdayDate(){
     yes = new Date(Date.now() - 86400000);
+    return yes.getDate()+" "+bulan[yes.getMonth()] + ' ' +(yes.getYear()+1900)
+}
+function getSelumbariDate(){
+    sl = new Date(Date.now() - 172800000);
     return yes.getDate()+" "+bulan[yes.getMonth()] + ' ' +(yes.getYear()+1900)
 }
 
