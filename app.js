@@ -184,8 +184,13 @@ function getFullTodayDate(){
     return hari[td.getDay()]+", "+td.getDate()+" "+bulanFull[td.getMonth()]+' '+(td.getYear()+1900)
 }
 
+let simulasikelembaban = 80
 setInterval(()=>{
-    getdataTS(Math.floor(Math.random()*100))
+    let change = ()=>{
+        let perubahan = Math.floor(Math.random()*4)
+         return (Math.random()>0.5)? simulasikelembaban+perubahan : simulasikelembaban-perubahan;
+    }
+    getdataTS(change)
 },1800000)
 getdataTS(Math.floor(Math.random()*100))
 
