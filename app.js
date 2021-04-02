@@ -6,17 +6,49 @@ const mysql = require('mysql');
 const bodyParser = require('body-parser')
 const fetch = require('node-fetch');
 
-const con = mysql.createConnection({
+
+let con = mysql.createConnection({
     host: "us-cdbr-east-03.cleardb.com",
     user: "bfbcfecc62cffc",
     password: "5773ae13",
     database:'heroku_87bfba42d7118f1'
   });
   
-con.connect(function(err) {
-    if (err) throw err;
-    console.log("Connected!");
-});
+// con.connect(function(err) {
+//     if (err) throw err;
+//     console.log("Connected!");
+// });
+
+// con.end();
+
+function handleDisconnect() {
+    con.on('error', function(err) {
+      if (!err.fatal) {
+        return;
+      }
+  
+      if (err.code !== 'PROTOCOL_CONNECTION_LOST') {
+        throw err;
+      }
+  
+      console.log('Re-connecting lost connection: ' + err.stack);
+  
+       con = mysql.createConnection({
+        host: "us-cdbr-east-03.cleardb.com",
+        user: "bfbcfecc62cffc",
+        password: "5773ae13",
+        database:'heroku_87bfba42d7118f1'
+      });
+
+
+      handleDisconnect();
+      con.connect();
+    });
+  }
+  
+  handleDisconnect();
+
+
 const port = process.env.PORT || 4000
 
 app.listen(port,()=>{
@@ -147,16 +179,21 @@ function getFullTodayDate(){
 
 setInterval(()=>{
     getdataTS(Math.floor(Math.random()*100))
-},60000)
+},1800000)
 getdataTS(Math.floor(Math.random()*100))
+
+
+
+
+
 
 function getdataTS(data){
     dt = new Date()
     jam =  dt.getHours() +':' + dt.getMinutes() //jam sekarang
     today = getTodayDate()
-   
 
-    
+
+
     try{
         con.query("SELECT * FROM data_lahan", function (err, result1, fields) {
             if (err) console.log(err);
@@ -166,7 +203,7 @@ function getdataTS(data){
     
                 con.query('INSERT INTO '+e.tabelkelembaban+' (date,time, data) VALUES (?,?,?)',[today,jam,data], function (err, result) {
                 if (err) throw err;
-                console.log("1 record inserted");
+                console.log("1 record inserted "+jam);
                 })
             })
     
@@ -176,6 +213,7 @@ function getdataTS(data){
     }catch(e){
         console.log(e)
     }
+    // con.end();
 
     
 }
