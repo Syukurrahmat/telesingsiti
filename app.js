@@ -155,6 +155,8 @@ function getdataTS(data){
     jam =  dt.getHours() +':' + dt.getMinutes() //jam sekarang
     today = getTodayDate()
    
+
+    
     try{
         con.query("SELECT * FROM data_lahan", function (err, result1, fields) {
             if (err) console.log(err);
