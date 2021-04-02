@@ -187,7 +187,7 @@ function getFullTodayDate(){
 let simulasikelembaban = 80
 setInterval(()=>{
     let perubahan = Math.floor(Math.random()*4)
-    if (Math.random()>0.5){
+    if (Math.random()>0.8){
         simulasikelembaban += perubahan;
     }else{
         simulasikelembaban -= perubahan;
