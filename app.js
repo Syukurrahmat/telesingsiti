@@ -7,10 +7,10 @@ const bodyParser = require('body-parser')
 const fetch = require('node-fetch');
 
 const con = mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    password: "",
-    database:'syukur'
+    host: "us-cdbr-east-03.cleardb.com",
+    user: "bfbcfecc62cffc",
+    password: "5773ae13",
+    database:'heroku_87bfba42d7118f1'
   });
   
 con.connect(function(err) {
@@ -147,7 +147,8 @@ function getFullTodayDate(){
 
 setInterval(()=>{
     getdataTS(Math.floor(Math.random()*100))
-},1800000)
+},60000)
+getdataTS(Math.floor(Math.random()*100))
 
 function getdataTS(data){
     dt = new Date()
