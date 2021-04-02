@@ -155,20 +155,25 @@ function getdataTS(data){
     jam =  dt.getHours() +':' + dt.getMinutes() //jam sekarang
     today = getTodayDate()
    
-    con.query("SELECT * FROM data_lahan", function (err, result1, fields) {
-        if (err) console.log(err);
-        
-        result1.forEach((e)=>{
-            // panggil api thingspeak
-
-            con.query('INSERT INTO '+e.tabelkelembaban+' (date,time, data) VALUES (?,?,?)',[today,jam,data], function (err, result) {
-            if (err) throw err;
-            console.log("1 record inserted");
+    try{
+        con.query("SELECT * FROM data_lahan", function (err, result1, fields) {
+            if (err) console.log(err);
+            
+            result1.forEach((e)=>{
+                // panggil api thingspeak
+    
+                con.query('INSERT INTO '+e.tabelkelembaban+' (date,time, data) VALUES (?,?,?)',[today,jam,data], function (err, result) {
+                if (err) throw err;
+                console.log("1 record inserted");
+                })
             })
+    
+    
         })
-
-
-    })
+    
+    }catch(e){
+        console.log(e)
+    }
 
     
 }
