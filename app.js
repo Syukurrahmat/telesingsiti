@@ -196,7 +196,7 @@ setInterval(()=>{
     getdataTS(simulasikelembaban)
 
 },1800000)
-getdataTS(Math.floor(Math.random()*100))
+getdataTS(simulasikelembaban)
 
 
 
