@@ -131,7 +131,7 @@ app.get('/lahan-:id',async function (req, res) {  //today
         // console.log(result1);
         
     // select column_name from table_name order by id desc limit 5
-        con.query("SELECT * FROM "+result1[0].tabelkelembaban +' order by `key` desc limit 8', function (err, result2, fields) {
+        con.query("SELECT * FROM "+result1[0].tabelkelembaban +' order by `key` desc limit 48', function (err, result2, fields) {
             if (err) console.log(err);
 
             let lastupdate = result2[0].time +' - '+result2[0].date
@@ -171,36 +171,13 @@ app.get('/lahan-:id',async function (req, res) {  //today
 let bulan = ['Jan','Feb','Mar','Apr','Mei','Jun','jul','Agu','Sep','Okt','Nov','Des']
 let gmt7 = 25200000
 
-function getTodayDate(){
-   
-    td = new Date(Date.now()+gmt7);
-    return td.getDate().toString().padStart(2, "0")+" "+bulan[td.getMonth()]+' '+(td.getYear()+1900)
-}
-function getYesterdayDate(){
-   
-    yes = new Date(Date.now() + gmt7 - 86400000);
-    return yes.getDate()+" "+bulan[yes.getMonth()] + ' ' +(yes.getYear()+1900)
-}
-function getSelumbariDate(){
-   
-    sl = new Date(Date.now() + gmt7 - 172800000);
-    return yes.getDate()+" "+bulan[yes.getMonth()] + ' ' +(yes.getYear()+1900)
-}
 
-function getFullTodayDate(){
-   
-    let bulanFull = ['Januari','Februari','Maret','April','Mei','Juni','juli','Agustus','September','Oktober','November','Desember']
-    let hari = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu']
-
-    td = new Date(Date.now() + gmt7);
-    return hari[td.getDay()]+", "+td.getDate()+" "+bulanFull[td.getMonth()]+' '+(td.getYear()+1900)
-}
 
 setInterval(()=>{
 
     getdataTS()
 
-},1200000) 
+},1200000) //20 menit
 
 
 getdataTS()
