@@ -23,7 +23,7 @@
             </a>
             
             <div class="navkanan">
-                <p><%= hari %></p>
+                <p><%= lastupdate %></p>
                 <!-- <div > -->
                     <img src="img/menu.svg" alt="">
                 <!-- </div> -->
@@ -72,10 +72,10 @@
                         <a href="/lahan-<%-data.id%>">
                             <div class="today <%= (rt=='today')? 'now':'' %>">24 Jam</div>
                         </a>
-                        <a href="/lahan-<%-data.id%>-yesterday">
+                        <a href="/lahan-<%-data.id%>=yes<%-nav.yesterday%>">
                             <div class="yesterday <%= (rt=='yesterday')? 'now':'' %>">Kemaren</div>
                         </a>
-                        <a href="/lahan-<%-data.id%>-selumbari">
+                        <a href="/lahan-<%-data.id%>=sel<%-nav.selumbari%>">
                             <div class="selumbari <%= (rt=='selumbari')? 'now':'' %>" >Selumbari</div>
                         </a>
                     </div>

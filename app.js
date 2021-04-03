@@ -72,49 +72,48 @@ app.get('/',async function (req, res) {
 })
 
 // yesterday page
-app.get('/lahan-:id-yesterday', function(req,res){
-
-    let yesterday = getYesterdayDate()
-
-    con.query("SELECT * FROM data_lahan WHERE id=?",[req.params.id], function (err, result1, fields) {
-        if (err) console.log(err);
-        // console.log(result1);
-        
-        con.query("SELECT * FROM "+result1[0].tabelkelembaban +' WHERE date=?',[yesterday], function (err, result2, fields) {
-            if (err) console.log(err);
-            // console.log(result2);
-
-            res.render('data',{
-                data:result1[0],
-                kelemb:JSON.stringify(result2),
-                rt:'yesterday',
-                hari:getFullTodayDate()
-            })
-
-        })
-
-    });
-})
 
 // all data page
-app.get('/lahan-:id-selumbari', function(req,res){
-    let selumbari = getSelumbariDate()
-
-    con.query("SELECT * FROM data_lahan WHERE id=?",[req.params.id], function (err, result1, fields) {
+app.get('/lahan-:id=:kon:date', function(req,res){
+    console.log('terakses yes selum')
+       con.query("SELECT * FROM data_lahan WHERE id=?",[req.params.id], function (err, result1, fields) {
         if (err) console.log(err);
         // console.log(result1);
         
-        con.query("SELECT * FROM "+result1[0].tabelkelembaban +' WHERE date=?',[selumbari], function (err, result2, fields) {
+        // SELECT * FROM Customers WHERE CustomerName LIKE 'a__%';
+
+        con.query("SELECT * FROM "+result1[0].tabelkelembaban +' order by `key` desc limit 1', function (err, result2, fields) {
             if (err) console.log(err);
-            // console.log(result2);
+        
+            let lastupdate = result2[0].time +' - '+result2[0].date
 
-            res.render('data',{
-                data:result1[0],
-                kelemb:JSON.stringify(result2),
-                rt:'yesterday',
-                hari:getFullTodayDate()
+            let yskey = new Date(Date.parse(result2[0].key)+86400000).toISOString().split('T')[0]
+            let slkey = new Date(Date.parse(result2[0].key)+172800000).toISOString().split('T')[0]
+
+            // console.log(lastupdate)
+            // console.log(yskey)
+            // console.log(slkey)
+
+            con.query("SELECT * FROM "+result1[0].tabelkelembaban +" WHERE `key` LIKE '"+ req.params.date+"%'" , function (err, result3, fields) {
+                if (err) console.log(err);
+                console.log(result3);
+    
+    
+                res.render('data',{
+                    data:result1[0],
+                    kelemb:JSON.stringify(result3),
+                    rt:(req.params.kon=='yes')? 'yesterday':'selumbari',
+                    lastupdate:lastupdate,
+                    nav:{
+                        yesterday:yskey,
+                        selumbari:slkey,
+                    }
+                })
+    
+                // res.end()
+    
             })
-
+        
         })
 
     });
@@ -123,33 +122,45 @@ app.get('/lahan-:id-selumbari', function(req,res){
 app.get('/lahan-:id',async function (req, res) {  //today
 
     today = getTodayDate()
+    console.log(today)
     yesterday = getYesterdayDate()
 
     con.query("SELECT * FROM data_lahan WHERE id=?",[req.params.id], function (err, result1, fields) {
         if (err) console.log(err);
+
         // console.log(result1);
         
-
-        con.query("SELECT * FROM "+result1[0].tabelkelembaban +' WHERE date=? OR date=?',[today,yesterday], function (err, result2, fields) {
+    // select column_name from table_name order by id desc limit 5
+        con.query("SELECT * FROM "+result1[0].tabelkelembaban +' order by `key` desc limit 8', function (err, result2, fields) {
             if (err) console.log(err);
 
-            result2.reverse()
+            let lastupdate = result2[0].time +' - '+result2[0].date
 
-            let dtToday= [];
-            for(i=0;i<48;i++){
-                dtToday.push(result2[i])
-            }
+            let yskey = new Date(Date.parse(result2[0].key)+86400000).toISOString().split('T')[0]
+            let slkey = new Date(Date.parse(result2[0].key)+172800000).toISOString().split('T')[0]
 
-            dtToday.reverse()
+            console.log(yskey)
+            console.log(slkey)
 
-            dtToday = dtToday.filter((e)=>e!=undefined)
+
+
+
+            let data = result2.reverse()
+            // console.log(data)
+
+            console.log(lastupdate)
 
             res.render('data',{
                 data:result1[0],
-                kelemb:JSON.stringify(dtToday),
+                kelemb:JSON.stringify(data),
                 rt:'today',
-                hari:getFullTodayDate(),
+                lastupdate:lastupdate,
+                nav:{
+                    yesterday:yskey,
+                    selumbari:slkey,
+                }
             })
+
 
         })
 
@@ -163,7 +174,7 @@ let gmt7 = 25200000
 function getTodayDate(){
    
     td = new Date(Date.now()+gmt7);
-    return td.getDate()+" "+bulan[td.getMonth()]+' '+(td.getYear()+1900)
+    return td.getDate().toString().padStart(2, "0")+" "+bulan[td.getMonth()]+' '+(td.getYear()+1900)
 }
 function getYesterdayDate(){
    
@@ -187,23 +198,23 @@ function getFullTodayDate(){
 
 let simulasikelembaban = 80
 setInterval(()=>{
-    let perubahan = Math.floor(Math.random()*4)
-    if (Math.random()>0.8){
-        simulasikelembaban += perubahan;
-    }else{
-        simulasikelembaban -= perubahan;
-    }
+    // let perubahan = Math.floor(Math.random()*4)
+    // if (Math.random()>0.8){
+    //     simulasikelembaban += perubahan;
+    // }else{
+    //     simulasikelembaban -= perubahan;
+    // }
 
-    getdataTS(simulasikelembaban)
+    getdataTS()
 
 },1800000) 
 
 
+getdataTS()
 
 
 
-
- function getdataTS(data){
+ function getdataTS(){
     
     con.query("SELECT * FROM data_lahan", function (err, result1, fields) {
         if (err) console.log(err);
@@ -223,7 +234,7 @@ setInterval(()=>{
                 }
                 catch(e){
                     console.log('data berhasil terupdate')
-// 
+
                 }
 
             })
