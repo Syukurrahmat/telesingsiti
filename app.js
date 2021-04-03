@@ -31,7 +31,7 @@ function handleDisconnect() {
         throw err;
       }
   
-      console.log('Re-connecting lost connection: ' + err.stack);
+      console.log('Re-connecting lost connection');
   
        con = mysql.createConnection({
         host: "us-cdbr-east-03.cleardb.com",
@@ -129,6 +129,7 @@ app.get('/lahan-:id',async function (req, res) {  //today
         if (err) console.log(err);
         // console.log(result1);
         
+
         con.query("SELECT * FROM "+result1[0].tabelkelembaban +' WHERE date=? OR date=?',[today,yesterday], function (err, result2, fields) {
             if (err) console.log(err);
 
@@ -195,42 +196,66 @@ setInterval(()=>{
 
     getdataTS(simulasikelembaban)
 
-},1800000)
-getdataTS(simulasikelembaban)
+},1800000) 
 
 
 
 
 
 
-function getdataTS(data){
+ function getdataTS(data){
     
-    dt =  new Date(Date.now()+gmt7)
-    jam =  dt.getHours() +':' + dt.getMinutes() //jam sekarang
-    today = getTodayDate()
-
-
-
-    try{
-        con.query("SELECT * FROM data_lahan", function (err, result1, fields) {
-            if (err) console.log(err);
+    con.query("SELECT * FROM data_lahan", function (err, result1, fields) {
+        if (err) console.log(err);
+        
+        result1.forEach(async function(e){
+            // panggil api thingspeak
+            let url = `https://api.thingspeak.com/channels/1347121/feeds.json?api_key=${e.apikey}&results=1`
             
-            result1.forEach((e)=>{
-                // panggil api thingspeak
-    
-                con.query('INSERT INTO '+e.tabelkelembaban+' (date,time, data) VALUES (?,?,?)',[today,jam,data], function (err, result) {
-                if (err) throw err;
-                console.log("1 record inserted "+jam);
-                })
+            let data = await apiTS(url)
+            
+
+            con.query('INSERT INTO '+e.tabelkelembaban+' (`key`,`date`,`time`, `data`) VALUES (?,?,?,?)',[data.key , data.date , data.time , data.data], function (err, result) {
+                try{
+                    if (err.code == 'ER_DUP_ENTRY') {
+                        console.log("thingspeak tidak update");   
+                    }
+                }
+                catch(e){
+                    console.log('data berhasil terupdate')
+
+                }
+
             })
-    
-    
+
         })
-    
-    }catch(e){
-        console.log(e)
-    }
-    // con.end();
+
+    })
+}
 
     
+
+// apiTS()
+function apiTS(url){
+    ft = fetch(url).then(res=>res.json())
+        .then(res=>{
+            let data = res.feeds[0]                        
+            let datekey = new Date(Date.parse(data.created_at)+gmt7).toISOString()
+            
+            let jam = datekey.split('T')[1].split('.')[0].split(':')
+            jam = jam[0]+':'+jam[1]
+
+            let date = datekey.split('T')[0] .split('-')
+            date = date[2]+' '+bulan[parseInt(date[1])-1] +' '+date[0]
+            
+            let dtkelemb = data.field1.split('r')[0]
+
+            return{
+                'key':datekey,
+                "date":date,
+                "time":jam,
+                "data":dtkelemb
+            }
+        })
+    return ft;
 }

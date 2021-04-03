@@ -119,9 +119,8 @@
         let klm = JSON.parse('<%-kelemb%>')
 
         datagrafik = klm.map(e=>{
-            bulan =['Jan','Feb','Mar','Apr','Mei','Jun','jul','Agu','Sep','Okt','Nov','Des']
             tgl = e.date.split(' ')
-            tgl = '('+tgl[0]+'/'+ bulan.indexOf(tgl[1])+')'
+            tgl = tgl[0]+' '+tgl[1]
             return {
                 'time': e.time +'\n'+tgl,
                 'data':e.data
@@ -182,7 +181,7 @@
 
             chart.zoomOutButton.disabled = true
 
-            categoryAxis.start =(screen.availWidth>600)? 0.6: 0.8;
+            categoryAxis.start =(screen.availWidth>600)? 0.6: 0.85;
             categoryAxis.end = 1;
             categoryAxis.keepSelection = true;
 
