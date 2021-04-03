@@ -209,7 +209,12 @@ aside  .tabel{
 aside .tabel .isitabelbox{
     height: 88%;
     position: absolute;
+  
+    overflow-x:hidden;
     overflow-y: overlay;
+  
+    scrollbar-width: thin;
+    scrollbar-color: #a5aaa8  rgba(255, 255, 255, 0);
 }
 aside  .isitb:nth-child(even){
     background-color: #f1f3f8;

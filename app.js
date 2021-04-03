@@ -136,16 +136,11 @@ app.get('/lahan-:id',async function (req, res) {  //today
             let yskey = new Date(Date.parse(result2[0].key)+86400000).toISOString().split('T')[0]
             let slkey = new Date(Date.parse(result2[0].key)+172800000).toISOString().split('T')[0]
 
-            console.log(yskey)
-            console.log(slkey)
-
-
-
 
             let data = result2.reverse()
             // console.log(data)
 
-            console.log(lastupdate)
+  
 
             res.render('data',{
                 data:result1[0],
@@ -173,7 +168,7 @@ setInterval(()=>{
 
     getdataTS()
 
-},1200000) //20 menit
+},720000) //12 menit
 
 
 getdataTS()
