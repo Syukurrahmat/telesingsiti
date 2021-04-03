@@ -223,7 +223,7 @@ setInterval(()=>{
                 }
                 catch(e){
                     console.log('data berhasil terupdate')
-
+// 
                 }
 
             })
