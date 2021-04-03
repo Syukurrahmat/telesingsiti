@@ -85,7 +85,7 @@ app.get('/lahan-:id=:kon:date', function(req,res){
         con.query("SELECT * FROM "+result1[0].tabelkelembaban +' order by `key` desc limit 1', function (err, result2, fields) {
             if (err) console.log(err);
         
-            let lastupdate = result2[0].time +' - '+result2[0].date
+            let lastupdate = result2[0].time +' '+result2[0].date
 
             let yskey = new Date(Date.parse(result2[0].key)+86400000).toISOString().split('T')[0]
             let slkey = new Date(Date.parse(result2[0].key)+172800000).toISOString().split('T')[0]
@@ -131,7 +131,7 @@ app.get('/lahan-:id',async function (req, res) {  //today
         con.query("SELECT * FROM "+result1[0].tabelkelembaban +' order by `key` desc limit 48', function (err, result2, fields) {
             if (err) console.log(err);
 
-            let lastupdate = result2[0].time +' - '+result2[0].date
+            let lastupdate = result2[0].time +' '+result2[0].date
 
             let yskey = new Date(Date.parse(result2[0].key)+86400000).toISOString().split('T')[0]
             let slkey = new Date(Date.parse(result2[0].key)+172800000).toISOString().split('T')[0]

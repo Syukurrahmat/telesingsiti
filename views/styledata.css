@@ -73,6 +73,7 @@ nav .navkanan p{
 }
 nav .navkanan img{
     width: 24px;
+    cursor: pointer;
 }
 
 nav img:last-child{
@@ -136,6 +137,12 @@ header .kanan{
 header .kanan p{
     margin-bottom: 16px;
     font-size: 2em;
+}
+header .kanan p:last-child{
+    margin-bottom: -3px;
+    font-size: 0.7em;
+    text-align: right;
+    font-style: italic;
 }
 
 /* bagian Grafik */
