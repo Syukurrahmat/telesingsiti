@@ -121,9 +121,6 @@ app.get('/lahan-:id=:kon:date', function(req,res){
 
 app.get('/lahan-:id',async function (req, res) {  //today
 
-    today = getTodayDate()
-    console.log(today)
-    yesterday = getYesterdayDate()
 
     con.query("SELECT * FROM data_lahan WHERE id=?",[req.params.id], function (err, result1, fields) {
         if (err) console.log(err);
@@ -170,7 +167,6 @@ app.get('/lahan-:id',async function (req, res) {  //today
 
 let bulan = ['Jan','Feb','Mar','Apr','Mei','Jun','jul','Agu','Sep','Okt','Nov','Des']
 let gmt7 = 25200000
-
 
 
 setInterval(()=>{
