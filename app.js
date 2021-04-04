@@ -135,7 +135,7 @@ app.use(function(req,res){
 });
 
 
-// cek thingspeak update setipa 12 menit
+// cek thingspeak update setiap 12 menit
 getdataTS()
 setInterval(getdataTS,720000)
 
