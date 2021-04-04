@@ -80,6 +80,7 @@ app.get('/lahan-:id=:kon-:date', function(req,res){
                 if(result3.length != 0){
                     res.render('data',{
                         data:result1[0],
+                        lastkelemb:result2[0].data,
                         kelemb:JSON.stringify(result3),
                         rt:(req.params.kon=='yes')? 'yesterday':'selumbari',
                         lastupdate:lastupdate,
@@ -112,6 +113,7 @@ app.get('/lahan-:id',async function (req, res) {
     
                 res.render('data',{
                     data:result1[0],
+                    lastkelemb:result2[0].data,
                     kelemb:JSON.stringify(result2.reverse()),
                     rt:'today',
                     lastupdate:lastupdate,
