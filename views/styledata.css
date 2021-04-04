@@ -74,10 +74,8 @@ nav .navkanan p{
 nav .navkanan img{
     width: 24px;
     cursor: pointer;
-}
-
-nav img:last-child{
     margin: 0 auto;
+
 }
 
 /* header */

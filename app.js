@@ -14,12 +14,7 @@ let con = mysql.createConnection({
     database:'heroku_87bfba42d7118f1'
   });
   
-// con.connect(function(err) {
-//     if (err) throw err;
-//     console.log("Connected!");
-// });
-
-// con.end();
+handleDisconnect();
 
 function handleDisconnect() {
     con.on('error', function(err) {
@@ -40,17 +35,12 @@ function handleDisconnect() {
         database:'heroku_87bfba42d7118f1'
       });
 
-
       handleDisconnect();
       con.connect();
     });
-  }
+}
   
-  handleDisconnect();
-
-
 const port = process.env.PORT || 4000
-
 app.listen(port,()=>{
     console.log('server connected')
 })
@@ -71,122 +61,92 @@ app.get('/',async function (req, res) {
     })
 })
 
-// yesterday page
-
-// all data page
-app.get('/lahan-:id=:kon:date', function(req,res){
-    console.log('terakses yes selum')
-       con.query("SELECT * FROM data_lahan WHERE id=?",[req.params.id], function (err, result1, fields) {
+// other day data page
+app.get('/lahan-:id=:kon-:date', function(req,res){
+    con.query("SELECT * FROM data_lahan WHERE id=?",[req.params.id], function (err, result1, fields) {
         if (err) console.log(err);
-        // console.log(result1);
-        
-        // SELECT * FROM Customers WHERE CustomerName LIKE 'a__%';
 
         con.query("SELECT * FROM "+result1[0].tabelkelembaban +' order by `key` desc limit 1', function (err, result2, fields) {
             if (err) console.log(err);
         
             let lastupdate = result2[0].time +' '+result2[0].date
-
-            let yskey = new Date(Date.parse(result2[0].key)+86400000).toISOString().split('T')[0]
-            let slkey = new Date(Date.parse(result2[0].key)+172800000).toISOString().split('T')[0]
-
-            // console.log(lastupdate)
-            // console.log(yskey)
-            // console.log(slkey)
+            let yskey = new Date(Date.parse(result2[0].key)-86400000).toISOString().split('T')[0]
+            let slkey = new Date(Date.parse(result2[0].key)-172800000).toISOString().split('T')[0]
 
             con.query("SELECT * FROM "+result1[0].tabelkelembaban +" WHERE `key` LIKE '"+ req.params.date+"%'" , function (err, result3, fields) {
                 if (err) console.log(err);
-                console.log(result3);
+
     
+                if(result3.length != 0){
+                    res.render('data',{
+                        data:result1[0],
+                        kelemb:JSON.stringify(result3),
+                        rt:(req.params.kon=='yes')? 'yesterday':'selumbari',
+                        lastupdate:lastupdate,
+                        nav:{
+                            yesterday:yskey,
+                            selumbari:slkey,
+                        }
+                    })
+                }else{
+                    res.status(404).render('error.ejs',{pesan:'data pada '+ req.params.date+' tidak tersedia'});
+                }
+            })
+        })
+    });
+})
+
+// show today data page
+app.get('/lahan-:id',async function (req, res) { 
+
+    con.query("SELECT * FROM data_lahan WHERE id=?",[req.params.id], function (err, result1, fields) {
+        if (err) console.log(err);
+
+        try{
+            con.query("SELECT * FROM "+result1[0].tabelkelembaban +' order by `key` desc limit 48', function (err, result2, fields) {
+                if (err) console.log(err);
+    
+                let lastupdate = result2[0].time +' '+result2[0].date
+                let yskey = new Date(Date.parse(result2[0].key)-86400000).toISOString().split('T')[0]
+                let slkey = new Date(Date.parse(result2[0].key)-172800000).toISOString().split('T')[0]
     
                 res.render('data',{
                     data:result1[0],
-                    kelemb:JSON.stringify(result3),
-                    rt:(req.params.kon=='yes')? 'yesterday':'selumbari',
+                    kelemb:JSON.stringify(result2.reverse()),
+                    rt:'today',
                     lastupdate:lastupdate,
                     nav:{
                         yesterday:yskey,
                         selumbari:slkey,
                     }
                 })
-    
-                // res.end()
-    
             })
-        
-        })
-
+        }catch(e){
+            res.status(404).render('error.ejs',{pesan:'halaman tidak ditemukan'});
+        }
     });
 })
 
-app.get('/lahan-:id',async function (req, res) {  //today
+//error page
+app.use(function(req,res){
+    res.status(404).render('error.ejs',{pesan:'halaman tidak ditemukan'});
+});
 
 
-    con.query("SELECT * FROM data_lahan WHERE id=?",[req.params.id], function (err, result1, fields) {
-        if (err) console.log(err);
-
-        // console.log(result1);
-        
-    // select column_name from table_name order by id desc limit 5
-        con.query("SELECT * FROM "+result1[0].tabelkelembaban +' order by `key` desc limit 48', function (err, result2, fields) {
-            if (err) console.log(err);
-
-            let lastupdate = result2[0].time +' '+result2[0].date
-
-            let yskey = new Date(Date.parse(result2[0].key)+86400000).toISOString().split('T')[0]
-            let slkey = new Date(Date.parse(result2[0].key)+172800000).toISOString().split('T')[0]
-
-
-            let data = result2.reverse()
-            // console.log(data)
-
-  
-
-            res.render('data',{
-                data:result1[0],
-                kelemb:JSON.stringify(data),
-                rt:'today',
-                lastupdate:lastupdate,
-                nav:{
-                    yesterday:yskey,
-                    selumbari:slkey,
-                }
-            })
-
-
-        })
-
-    });
-})
-
-
-let bulan = ['Jan','Feb','Mar','Apr','Mei','Jun','jul','Agu','Sep','Okt','Nov','Des']
-let gmt7 = 25200000
-
-
-setInterval(()=>{
-
-    getdataTS()
-
-},720000) //12 menit
-
-
+// cek thingspeak update setipa 12 menit
 getdataTS()
+setInterval(getdataTS,720000)
 
-
-
- function getdataTS(){
-    
+// cek thingspeak update 
+function getdataTS(){  
     con.query("SELECT * FROM data_lahan", function (err, result1, fields) {
         if (err) console.log(err);
         
         result1.forEach(async function(e){
-            // panggil api thingspeak
+
             let url = `https://api.thingspeak.com/channels/1347121/feeds.json?api_key=${e.apikey}&results=1`
-            
             let data = await apiTS(url)
             
-
             con.query('INSERT INTO '+e.tabelkelembaban+' (`key`,`date`,`time`, `data`) VALUES (?,?,?,?)',[data.key , data.date , data.time , data.data], function (err, result) {
                 try{
                     if (err.code == 'ER_DUP_ENTRY') {
@@ -195,20 +155,17 @@ getdataTS()
                 }
                 catch(e){
                     console.log('data berhasil terupdate')
-
                 }
-
             })
-
         })
-
     })
 }
 
-    
-
-// apiTS()
+// ambil data kelembaban tanah dari thingspeak API
 function apiTS(url){
+    let bulan = ['Jan','Feb','Mar','Apr','Mei','Jun','jul','Agu','Sep','Okt','Nov','Des']
+    let gmt7 = 25200000
+
     ft = fetch(url).then(res=>res.json())
         .then(res=>{
             let data = res.feeds[0]                        

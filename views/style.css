@@ -67,6 +67,7 @@ nav img:first-child{
 
 nav .navkanan img{
     width: 24px;
+    cursor: pointer;
 }
 
 nav img:last-child{
