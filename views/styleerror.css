@@ -73,10 +73,10 @@ nav .navkanan p{
 nav .navkanan img{
     width: 24px;
     margin: 0 auto;
-
+    cursor: pointer;
 }
 
-
+/* main */
 main{
     display: flex;
     justify-content: center;
