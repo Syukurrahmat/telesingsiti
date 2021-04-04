@@ -21,20 +21,16 @@ function handleDisconnect() {
       if (!err.fatal) {
         return;
       }
-  
       if (err.code !== 'PROTOCOL_CONNECTION_LOST') {
         throw err;
       }
-  
       console.log('Re-connecting lost connection');
-  
-       con = mysql.createConnection({
+      con = mysql.createConnection({
         host: "us-cdbr-east-03.cleardb.com",
         user: "bfbcfecc62cffc",
         password: "5773ae13",
         database:'heroku_87bfba42d7118f1'
       });
-
       handleDisconnect();
       con.connect();
     });
@@ -76,7 +72,6 @@ app.get('/lahan-:id=:kon-:date', function(req,res){
             con.query("SELECT * FROM "+result1[0].tabelkelembaban +" WHERE `key` LIKE '"+ req.params.date+"%'" , function (err, result3, fields) {
                 if (err) console.log(err);
 
-    
                 if(result3.length != 0){
                     res.render('data',{
                         data:result1[0],
