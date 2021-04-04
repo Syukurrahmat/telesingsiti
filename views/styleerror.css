@@ -95,3 +95,12 @@ main p{
     color: #3781C2;
 
 }
+
+/* responsif */
+@media screen and (max-width:620px){
+    main{
+        flex-direction: column;
+        text-align: center;
+    }
+
+}
