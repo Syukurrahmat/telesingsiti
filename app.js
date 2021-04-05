@@ -49,7 +49,7 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended:false}))
 
 
-// ROOT
+// Home
 app.get('/',async function (req, res) {
     con.query("SELECT * FROM data_lahan", function (err, result, fields) {
         if (err) console.log(err);
@@ -77,7 +77,7 @@ app.get('/lahan-:id=:kon-:date', function(req,res){
                         data:result1[0],
                         lastkelemb:result2[0].data,
                         kelemb:JSON.stringify(result3),
-                        rt:(req.params.kon=='yes')? 'yesterday':'selumbari',
+                        rt:req.params.kon,
                         lastupdate:lastupdate,
                         nav:{
                             yesterday:yskey,
@@ -130,9 +130,9 @@ app.use(function(req,res){
 });
 
 
-// cek thingspeak update setiap 12 menit
+// cek thingspeak update setiap 10 menit
 getdataTS()
-setInterval(getdataTS,720000)
+setInterval(getdataTS,600000)
 
 // cek thingspeak update 
 function getdataTS(){  
