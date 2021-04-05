@@ -6,7 +6,6 @@ const mysql = require('mysql');
 const bodyParser = require('body-parser')
 const fetch = require('node-fetch');
 
-
 let con = mysql.createConnection({
     host: "us-cdbr-east-03.cleardb.com",
     user: "bfbcfecc62cffc",
