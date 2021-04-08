@@ -71,13 +71,13 @@
                     <h4>Grafik Kelembaban Tanah</h4>
                     <div class="pilih">
                         <a href="/lahan-<%-data.id%>">
-                            <div class="today <%= (rt=='today')? 'now':'' %>">Terkini</div>
+                            <div class="today <%= (classnav=='today')? 'now':'' %>">Terkini</div>
                         </a>
                         <a href="/lahan-<%-data.id%>=yes-<%-nav.yesterday%>">
-                            <div class="yesterday <%= (rt=='yes')? 'now':'' %>">Kemaren</div>
+                            <div class="yesterday <%= (classnav=='yes')? 'now':'' %>">Kemaren</div>
                         </a>
                         <a href="/lahan-<%-data.id%>=sel-<%-nav.selumbari%>">
-                            <div class="selumbari <%= (rt=='sel')? 'now':'' %>" >Selumbari</div>
+                            <div class="selumbari <%= (classnav=='sel')? 'now':'' %>" >Selumbari</div>
                         </a>
                     </div>
                 </div>
