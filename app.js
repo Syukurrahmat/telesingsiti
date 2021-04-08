@@ -50,14 +50,15 @@ app.use(bodyParser.urlencoded({extended:false}))
 
 // Home
 app.get('/',async function (req, res) {
-    con.query("SELECT * FROM data_lahan", function (err, result, fields) {
+    con.query("SELECT id, lahan FROM data_lahan", function (err, result, fields) {
         if (err) console.log(err);
+
         res.render('index.ejs',{data:result})
     })
 })
 
 // other day data page
-app.get('/lahan-:id=:kon-:date', function(req,res){
+app.get('/lahan-:id=:nav-:date', function(req,res){
     con.query("SELECT * FROM data_lahan WHERE id=?",[req.params.id], function (err, result1, fields) {
         if (err) console.log(err);
 
@@ -76,7 +77,7 @@ app.get('/lahan-:id=:kon-:date', function(req,res){
                         data:result1[0],
                         lastkelemb:result2[0].data,
                         kelemb:JSON.stringify(result3),
-                        classnav:req.params.kon,
+                        classnav:req.params.nav,
                         lastupdate:lastupdate,
                         nav:{
                             yesterday:yskey,
