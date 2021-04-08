@@ -76,7 +76,7 @@ app.get('/lahan-:id=:kon-:date', function(req,res){
                         data:result1[0],
                         lastkelemb:result2[0].data,
                         kelemb:JSON.stringify(result3),
-                        clasnav:req.params.kon,
+                        classnav:req.params.kon,
                         lastupdate:lastupdate,
                         nav:{
                             yesterday:yskey,
