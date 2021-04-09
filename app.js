@@ -106,6 +106,7 @@ app.get('/lahan-:id',async function (req, res) {
                 let yskey = new Date(Date.parse(result2[0].key)-86400000).toISOString().split('T')[0]
                 let slkey = new Date(Date.parse(result2[0].key)-172800000).toISOString().split('T')[0]
     
+                
                 res.render('data',{
                     data:result1[0],
                     lastkelemb:result2[0].data,
@@ -136,9 +137,9 @@ setInterval(getdataTS,600000)
 
 // cek thingspeak update 
 function getdataTS(){  
-    con.query("SELECT * FROM data_lahan", function (err, result1, fields) {
+    con.query("SELECT tabelkelembaban, apikey FROM data_lahan", function (err, result1, fields) {
         if (err) console.log(err);
-        
+
         result1.forEach(async function(e){
 
             let url = `https://api.thingspeak.com/channels/1347121/feeds.json?api_key=${e.apikey}&results=1`
