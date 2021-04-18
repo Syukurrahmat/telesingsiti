@@ -132,8 +132,9 @@ app.use(function(req,res){
 
 
 // cek thingspeak update setiap 10 menit
-getdataTS()
-setInterval(getdataTS,600000)
+
+// getdataTS()        [di nonaktifkan]
+// setInterval(getdataTS,600000)     [di nonaktifkan]
 
 // cek thingspeak update 
 function getdataTS(){  
